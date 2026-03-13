@@ -1,0 +1,173 @@
+@startuml
+
+!theme plain
+top to bottom direction
+skinparam linetype ortho
+
+' =========================
+' REPOSITORY LAYER
+' =========================
+
+interface Repository<ID, E>
+class AbstractRepository<ID, E>
+class FileAbstractRepository<ID, E>
+class FileOrderRepository
+class FileProductRepository
+class FileRetetaRepository
+class FileStocRepository
+
+AbstractRepository -[#008200,dashed]-^ Repository
+FileAbstractRepository -[#000082,plain]-^ AbstractRepository
+FileOrderRepository -[#000082,plain]-^ FileAbstractRepository
+FileProductRepository -[#000082,plain]-^ FileAbstractRepository
+FileRetetaRepository -[#000082,plain]-^ FileAbstractRepository
+FileStocRepository -[#000082,plain]-^ FileAbstractRepository
+
+FileOrderRepository "1" *-[#595959,plain]-> "productRepository\n1" Repository
+
+' =========================
+' DOMAIN LAYER
+' =========================
+
+class Product
+class Order
+class OrderItem
+class Reteta
+class IngredientReteta
+class Stoc
+
+enum CategorieBautura
+enum TipBautura
+enum UnitateMasura
+
+Product "1" *-[#595959,plain]-> "categorie\n1" CategorieBautura
+Product "1" *-[#595959,plain]-> "tip\n1" TipBautura
+
+' Corectie A09
+' Relatiile dintre entitati au roluri si multiplicitati clare
+Order "1" *-[#595959,plain]-> "items\n*" OrderItem
+OrderItem "1" *-[#595959,plain]-> "product\n1" Product
+
+' Corectie A10
+' A fost adaugata unitatea de masura pentru ingrediente
+Reteta "1" *-[#595959,plain]-> "ingrediente\n*" IngredientReteta
+IngredientReteta --> UnitateMasura
+
+
+' =========================
+' SERVICE LAYER
+' =========================
+
+class DrinkShopService
+class OrderService
+class ProductService
+class RetetaService
+class StocService
+class DailyReportService
+
+' Corectie A04
+' Responsabilitatile sunt separate in servicii specializate
+DrinkShopService "1" *-[#595959,plain]-> "orderService\n1" OrderService
+DrinkShopService "1" *-[#595959,plain]-> "productService\n1" ProductService
+DrinkShopService "1" *-[#595959,plain]-> "retetaService\n1" RetetaService
+DrinkShopService "1" *-[#595959,plain]-> "stocService\n1" StocService
+DrinkShopService "1" *-[#595959,plain]-> "report\n1" DailyReportService
+
+OrderService "1" *-[#595959,plain]-> "orderRepo\n1" Repository
+ProductService "1" *-[#595959,plain]-> "productRepo\n1" Repository
+RetetaService "1" *-[#595959,plain]-> "retetaRepo\n1" Repository
+StocService "1" *-[#595959,plain]-> "stocRepo\n1" Repository
+
+DailyReportService "1" *-[#595959,plain]-> "repo\n1" Repository
+
+OrderService --> Order
+ProductService --> Product
+RetetaService --> Reteta
+StocService --> Stoc
+
+
+' =========================
+' CONTROLLER / UI
+' =========================
+
+class DrinkShopApp
+class DrinkShopController
+
+DrinkShopApp --> DrinkShopController
+
+' Corectie A08
+' Controllerul delega logica de business catre Service
+DrinkShopController "1" *-[#595959,plain]-> "service\n1" DrinkShopService
+
+
+' =========================
+' VALIDATION
+' =========================
+
+together {
+interface Validator<T>
+class ProductValidator
+class OrderValidator
+class OrderItemValidator
+class RetetaValidator
+class StocValidator
+}
+
+ProductValidator -[#008200,dashed]-^ Validator
+OrderValidator -[#008200,dashed]-^ Validator
+OrderItemValidator -[#008200,dashed]-^ Validator
+RetetaValidator -[#008200,dashed]-^ Validator
+StocValidator -[#008200,dashed]-^ Validator
+
+OrderValidator "1" *-[#595959,plain]-> "itemValidator\n1" OrderItemValidator
+
+ProductValidator --> Product
+OrderValidator --> Order
+RetetaValidator --> Reteta
+StocValidator --> Stoc
+
+
+' =========================
+' USERS
+' =========================
+
+together {
+class User
+enum UserRole
+}
+
+' Corectie A03
+' Sistemul include gestionarea utilizatorilor si a rolurilor
+User --> UserRole
+DrinkShopService --> User
+
+
+' =========================
+' EXCEPTIONS
+' =========================
+
+together {
+class ApplicationException
+class ValidationException
+class StockException
+}
+
+' Corectie A05
+' A fost introdusa o ierarhie de exceptii pentru tratarea erorilor
+ValidationException -[#000082,plain]-^ ApplicationException
+StockException -[#000082,plain]-^ ApplicationException
+
+
+' =========================
+' UTILITIES
+' =========================
+
+together {
+class CsvExporter
+class ReceiptGenerator
+}
+
+OrderService --> ReceiptGenerator
+DailyReportService --> CsvExporter
+
+@enduml
