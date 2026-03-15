@@ -4,170 +4,102 @@
 top to bottom direction
 skinparam linetype ortho
 
-' =========================
-' REPOSITORY LAYER
-' =========================
-
-interface Repository<ID, E>
 class AbstractRepository<ID, E>
+enum CategorieBautura << enumeration >>
+class CsvExporter
+class DailyReportService
+class DrinkShopApp
+class DrinkShopController
+class DrinkShopService
 class FileAbstractRepository<ID, E>
 class FileOrderRepository
 class FileProductRepository
 class FileRetetaRepository
 class FileStocRepository
-
-AbstractRepository -[#008200,dashed]-^ Repository
-FileAbstractRepository -[#000082,plain]-^ AbstractRepository
-FileOrderRepository -[#000082,plain]-^ FileAbstractRepository
-FileProductRepository -[#000082,plain]-^ FileAbstractRepository
-FileRetetaRepository -[#000082,plain]-^ FileAbstractRepository
-FileStocRepository -[#000082,plain]-^ FileAbstractRepository
-
-FileOrderRepository "1" *-[#595959,plain]-> "productRepository\n1" Repository
-
-' =========================
-' DOMAIN LAYER
-' =========================
-
-class Product
+class IngredientReteta
 class Order
 class OrderItem
-class Reteta
-class IngredientReteta
-class Stoc
-
-enum CategorieBautura
-enum TipBautura
-enum UnitateMasura
-
-Product "1" *-[#595959,plain]-> "categorie\n1" CategorieBautura
-Product "1" *-[#595959,plain]-> "tip\n1" TipBautura
-
-' Corectie A09
-' Relatiile dintre entitati au roluri si multiplicitati clare
-Order "1" *-[#595959,plain]-> "items\n*" OrderItem
-OrderItem "1" *-[#595959,plain]-> "product\n1" Product
-
-' Corectie A10
-' A fost adaugata unitatea de masura pentru ingrediente
-Reteta "1" *-[#595959,plain]-> "ingrediente\n*" IngredientReteta
-IngredientReteta --> UnitateMasura
-
-
-' =========================
-' SERVICE LAYER
-' =========================
-
-class DrinkShopService
-class OrderService
-class ProductService
-class RetetaService
-class StocService
-class DailyReportService
-
-' Corectie A04
-' Responsabilitatile sunt separate in servicii specializate
-DrinkShopService "1" *-[#595959,plain]-> "orderService\n1" OrderService
-DrinkShopService "1" *-[#595959,plain]-> "productService\n1" ProductService
-DrinkShopService "1" *-[#595959,plain]-> "retetaService\n1" RetetaService
-DrinkShopService "1" *-[#595959,plain]-> "stocService\n1" StocService
-DrinkShopService "1" *-[#595959,plain]-> "report\n1" DailyReportService
-
-OrderService "1" *-[#595959,plain]-> "orderRepo\n1" Repository
-ProductService "1" *-[#595959,plain]-> "productRepo\n1" Repository
-RetetaService "1" *-[#595959,plain]-> "retetaRepo\n1" Repository
-StocService "1" *-[#595959,plain]-> "stocRepo\n1" Repository
-
-DailyReportService "1" *-[#595959,plain]-> "repo\n1" Repository
-
-OrderService --> Order
-ProductService --> Product
-RetetaService --> Reteta
-StocService --> Stoc
-
-
-' =========================
-' CONTROLLER / UI
-' =========================
-
-class DrinkShopApp
-class DrinkShopController
-
-DrinkShopApp --> DrinkShopController
-
-' Corectie A08
-' Controllerul delega logica de business catre Service
-DrinkShopController "1" *-[#595959,plain]-> "service\n1" DrinkShopService
-
-
-' =========================
-' VALIDATION
-' =========================
-
-together {
-interface Validator<T>
-class ProductValidator
-class OrderValidator
 class OrderItemValidator
+class OrderService
+class OrderValidator
+class Product
+class ProductService
+class ProductValidator
+class ReceiptGenerator
+interface Repository<ID, E> << interface >>
+class Reteta
+class RetetaService
 class RetetaValidator
+class Stoc
+class StocService
 class StocValidator
-}
+enum TipBautura << enumeration >>
+class ValidationException
+interface Validator<T> << interface >>
 
-ProductValidator -[#008200,dashed]-^ Validator
-OrderValidator -[#008200,dashed]-^ Validator
-OrderItemValidator -[#008200,dashed]-^ Validator
-RetetaValidator -[#008200,dashed]-^ Validator
-StocValidator -[#008200,dashed]-^ Validator
-
-OrderValidator "1" *-[#595959,plain]-> "itemValidator\n1" OrderItemValidator
-
-ProductValidator --> Product
-OrderValidator --> Order
-RetetaValidator --> Reteta
-StocValidator --> Stoc
-
-
-' =========================
-' USERS
-' =========================
-
-together {
+' CORECTIE A03
+' adaugare gestionare utilizatori si roluri
 class User
 enum UserRole
-}
-
-' Corectie A03
-' Sistemul include gestionarea utilizatorilor si a rolurilor
 User --> UserRole
-DrinkShopService --> User
 
-
-' =========================
-' EXCEPTIONS
-' =========================
-
-together {
+' CORECTIE A05
+' strategie de tratare a erorilor
 class ApplicationException
-class ValidationException
 class StockException
-}
-
-' Corectie A05
-' A fost introdusa o ierarhie de exceptii pentru tratarea erorilor
 ValidationException -[#000082,plain]-^ ApplicationException
 StockException -[#000082,plain]-^ ApplicationException
 
+' Relatii Repository
+AbstractRepository      -[#008200,dashed]-^  Repository
+FileAbstractRepository  -[#000082,plain]-^  AbstractRepository
+FileOrderRepository     -[#000082,plain]-^  FileAbstractRepository
+FileProductRepository   -[#000082,plain]-^  FileAbstractRepository
+FileRetetaRepository    -[#000082,plain]-^  FileAbstractRepository
+FileStocRepository      -[#000082,plain]-^  FileAbstractRepository
 
-' =========================
-' UTILITIES
-' =========================
+FileOrderRepository "1" *-[#595959,plain]-> "productRepository\n1" Repository
 
-together {
-class CsvExporter
-class ReceiptGenerator
-}
+' CORECTIE A04
+' responsabilitatile sunt distribuite intre servicii specializate
+DrinkShopService       "1" *-[#595959,plain]-> "report\n1" DailyReportService
+DrinkShopService       "1" *-[#595959,plain]-> "orderService\n1" OrderService
+DrinkShopService       "1" *-[#595959,plain]-> "productService\n1" ProductService
+DrinkShopService       "1" *-[#595959,plain]-> "retetaService\n1" RetetaService
+DrinkShopService       "1" *-[#595959,plain]-> "stocService\n1" StocService
 
-OrderService --> ReceiptGenerator
-DailyReportService --> CsvExporter
+' CORECTIE A08
+' controller delega logica catre service
+DrinkShopController    "1" *-[#595959,plain]-> "service\n1" DrinkShopService
+
+' Relatii Service - Repository
+OrderService           "1" *-[#595959,plain]-> "orderRepo\n1" Repository
+ProductService         "1" *-[#595959,plain]-> "productRepo\n1" Repository
+RetetaService          "1" *-[#595959,plain]-> "retetaRepo\n1" Repository
+StocService            "1" *-[#595959,plain]-> "stocRepo\n1" Repository
+
+DailyReportService     "1" *-[#595959,plain]-> "repo\n1" Repository
+
+' CORECTIE A09
+' relatii cu roluri si multiplicitati clare
+Order                  "1" *-[#595959,plain]-> "items\n*" OrderItem
+OrderItem              "1" *-[#595959,plain]-> "product\n1" Product
+
+Product                "1" *-[#595959,plain]-> "categorie\n1" CategorieBautura
+Product                "1" *-[#595959,plain]-> "tip\n1" TipBautura
+
+' CORECTIE A10
+' unitate de masura pentru ingrediente
+enum UnitateMasura
+Reteta                 "1" *-[#595959,plain]-> "ingrediente\n*" IngredientReteta
+IngredientReteta --> UnitateMasura
+
+' Validatori
+OrderItemValidator      -[#008200,dashed]-^  Validator
+OrderValidator          -[#008200,dashed]-^  Validator
+OrderValidator         "1" *-[#595959,plain]-> "itemValidator\n1" OrderItemValidator
+ProductValidator        -[#008200,dashed]-^  Validator
+RetetaValidator         -[#008200,dashed]-^  Validator
+StocValidator           -[#008200,dashed]-^  Validator
 
 @enduml
