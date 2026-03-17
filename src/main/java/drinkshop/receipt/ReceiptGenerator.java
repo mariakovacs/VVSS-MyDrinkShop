@@ -1,0 +1,25 @@
+package drinkshop.receipt;
+
+import drinkshop.domain.Order;
+import drinkshop.domain.OrderItem;
+import drinkshop.domain.Product;
+
+import java.util.List;
+
+public class ReceiptGenerator {
+    public static String generate(Order o, List<Product> products) {
+        StringBuilder sb = new StringBuilder();
+        double total = 0.0;
+        sb.append("===== BON FISCAL =====\n").append("Comanda #").append(o.getId()).append("\n");
+        for (OrderItem i : o.getItems()) {
+            Product p = products.stream()
+                    .filter((p1)->i.getProduct().getId()==p1.getId())
+                    .findFirst()
+                    .orElse(i.getProduct());
+            sb.append(p.getNume()+": ").append(p.getPret()).append(" x ").append(i.getQuantity()).append(" = ").append(i.getTotal()).append(" RON\n");
+            total += i.getTotal();
+        }
+        sb.append("---------------------\nTOTAL: ").append(total).append(" RON\n=====================\n");
+        return sb.toString();
+    }
+}
