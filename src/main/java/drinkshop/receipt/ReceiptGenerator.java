@@ -6,6 +6,7 @@ import drinkshop.domain.Product;
 
 import java.util.List;
 
+
 public class ReceiptGenerator {
     public static String generate(Order o, List<Product> products) {
         StringBuilder sb = new StringBuilder();
