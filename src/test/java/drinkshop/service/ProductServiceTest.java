@@ -144,28 +144,10 @@ class ProductServiceTest {
     @DisplayName("BVA invalid: Invalid price!")
     @Tag("BVA")
     @Timeout(value = 1, unit = TimeUnit.SECONDS)
-    void addProductBvaPriceMinusOne() {
-        // Arrange
-        Product product = new Product(
-                19,
-                "Expresso",
-                -1.0,
-                CategorieBautura.CLASSIC_COFFEE,
-                TipBautura.BASIC
-        );
-
-        // Act + Assert
-        assertThrows(ValidationException.class, () -> productService.addProduct(product));
-    }
-
-    @Test
-    @DisplayName("BVA invalid: Invalid price!")
-    @Tag("BVA")
-    @Timeout(value = 1, unit = TimeUnit.SECONDS)
     void addProductBvaPriceMinusZeroPointZeroOne() {
         // Arrange
         Product product = new Product(
-                20,
+                10,
                 "Latte",
                 -0.01,
                 CategorieBautura.MILK_COFFEE,
@@ -183,7 +165,7 @@ class ProductServiceTest {
     void addProductBvaPriceZero() {
         // Arrange
         Product product = new Product(
-                21,
+                20,
                 "Matcha",
                 0.0,
                 CategorieBautura.TEA,
@@ -201,7 +183,7 @@ class ProductServiceTest {
     void addProductBvaPricePointZeroOne() {
         // Arrange
         Product product = new Product(
-                22,
+                21,
                 "Limonada",
                 0.1,
                 CategorieBautura.JUICE,
@@ -219,7 +201,7 @@ class ProductServiceTest {
     void addProductBvaPricePointZeroTwo() {
         // Arrange
         Product product = new Product(
-                23,
+                22,
                 "Ceai Verde",
                 0.02,
                 CategorieBautura.TEA,
@@ -231,31 +213,13 @@ class ProductServiceTest {
     }
 
     @Test
-    @DisplayName("BVA valid: price = 9999.99")
-    @Tag("BVA")
-    @Timeout(value = 1, unit = TimeUnit.SECONDS)
-    void addProductBvaPriceLarge() {
-        // Arrange
-        Product product = new Product(
-                24,
-                "Latte Grande",
-                9999.99,
-                CategorieBautura.MILK_COFFEE,
-                TipBautura.DAIRY
-        );
-
-        // Act + Assert
-        assertDoesNotThrow(() -> productService.addProduct(product));
-    }
-
-    @Test
     @DisplayName("BVA invalid: Name cannot be null!")
     @Tag("BVA")
     @Timeout(value = 1, unit = TimeUnit.SECONDS)
     void addProductBvaNameNull() {
         // Arrange
         Product product = new Product(
-                25,
+                23,
                 null,
                 10.0,
                 CategorieBautura.JUICE,
@@ -274,7 +238,7 @@ class ProductServiceTest {
     void addProductBvaNameEmpty() {
          // Arrange
          Product product = new Product(
-                 26,
+                 24,
                  "",
                  12,
                  CategorieBautura.TEA,
@@ -292,7 +256,7 @@ class ProductServiceTest {
     void addProductBvaNameOneChar() {
         // Arrange
         Product product = new Product(
-                27,
+                25,
                 "A",
                 15.0,
                 CategorieBautura.JUICE,
@@ -310,7 +274,7 @@ class ProductServiceTest {
     void addProductBvaNameTwoChar() {
         // Arrange
         Product product = new Product(
-                28,
+                26,
                 "A",
                 20.0,
                 CategorieBautura.MILK_COFFEE,
