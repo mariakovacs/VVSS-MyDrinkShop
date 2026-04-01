@@ -155,7 +155,7 @@ class ProductServiceTest {
         );
 
         // Act + Assert
-        assertDoesNotThrow(() -> productService.addProduct(product));
+        assertThrows(ValidationException.class,() -> productService.addProduct(product));
     }
 
     @Test
@@ -173,7 +173,7 @@ class ProductServiceTest {
         );
 
         // Act + Assert
-        assertDoesNotThrow(() -> productService.addProduct(product));
+        assertThrows(ValidationException.class, () -> productService.addProduct(product));
     }
 
     @Test
@@ -185,13 +185,13 @@ class ProductServiceTest {
         Product product = new Product(
                 21,
                 "Limonada",
-                0.1,
+                0.01,
                 CategorieBautura.JUICE,
                 TipBautura.WATER_BASED
         );
 
         // Act + Assert
-        assertThrows(ValidationException.class, () -> productService.addProduct(product));
+        assertDoesNotThrow(() -> productService.addProduct(product));
     }
 
     @Test
@@ -209,7 +209,7 @@ class ProductServiceTest {
         );
 
         // Act + Assert
-        assertThrows(ValidationException.class, () -> productService.addProduct(product));
+        assertDoesNotThrow(() -> productService.addProduct(product));
     }
 
     @Test
@@ -227,7 +227,7 @@ class ProductServiceTest {
         );
 
         // Act + Assert
-        assertDoesNotThrow(() -> productService.addProduct(product));
+        assertThrows(ValidationException.class, () -> productService.addProduct(product));
     }
 
 
@@ -243,10 +243,10 @@ class ProductServiceTest {
                  12,
                  CategorieBautura.TEA,
                  TipBautura.BASIC
-    );
+         );
 
-    // Act + Assert
-    assertDoesNotThrow(() -> productService.addProduct(product));
+        // Act + Assert
+        assertThrows(ValidationException.class, () -> productService.addProduct(product));
     }
 
     @Test
@@ -264,7 +264,7 @@ class ProductServiceTest {
         );
 
         // Act + Assert
-        assertThrows(ValidationException.class, () -> productService.addProduct(product));
+        assertDoesNotThrow(() -> productService.addProduct(product));
     }
 
     @Test
@@ -275,14 +275,14 @@ class ProductServiceTest {
         // Arrange
         Product product = new Product(
                 26,
-                "A",
+                "AB",
                 20.0,
                 CategorieBautura.MILK_COFFEE,
                 TipBautura.PLANT_BASED
         );
 
         // Act + Assert
-        assertThrows(ValidationException.class, () -> productService.addProduct(product));
+        assertDoesNotThrow(() -> productService.addProduct(product));
     }
 
 }

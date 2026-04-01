@@ -24,6 +24,7 @@ public class ProductService {
 
     public void updateProduct(int id, String name, double price, CategorieBautura categorie, TipBautura tip) {
         Product updated = new Product(id, name, price, categorie, tip);
+        validator.validate(updated);
         productRepo.update(updated);
     }
 
