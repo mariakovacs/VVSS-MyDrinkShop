@@ -18,7 +18,8 @@ public class Order implements Serializable {
 
     public Order(int id, List<OrderItem> items, double totalPrice) {
         this.id = id;
-        this.items = new ArrayList<>(items);
+//        this.items = new ArrayList<>(items);
+        this.items = items;
         this.totalPrice = totalPrice;
     }
 

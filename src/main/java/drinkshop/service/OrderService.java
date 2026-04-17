@@ -40,16 +40,45 @@ public class OrderService {
         return orderRepo.findOne(id);
     }
 
+//    public double computeTotal(Order o) {
+//        return o.getItems().stream()
+//                .mapToDouble(i -> {
+//                    Product product = productRepo.findOne(i.getProduct().getId());
+//                    if (product == null) {
+//                        product = i.getProduct();
+//                    }
+//                    return product.getPret() * i.getQuantity();
+//                })
+//                .sum();
+//    }
+
     public double computeTotal(Order o) {
-        return o.getItems().stream()
-                .mapToDouble(i -> {
-                    Product product = productRepo.findOne(i.getProduct().getId());
-                    if (product == null) {
-                        product = i.getProduct();
-                    }
-                    return product.getPret() * i.getQuantity();
-                })
-                .sum();
+        // D1 - comanda null
+        if (o == null) {
+            throw new IllegalArgumentException("Comanda nu poate fi null.");
+        }
+        List<OrderItem> items = o.getItems();
+        // D2 - lista null sau goala
+        if (items == null || items.isEmpty()) {
+            return 0.0;
+        }
+        double total = 0.0;
+        // D3 - parcurgere itemi
+        for (OrderItem item : items) {
+            // D4 - validare item
+            if (item == null ||
+                    item.getProduct() == null ||
+                    item.getQuantity() <= 0) {
+                throw new IllegalArgumentException("Item invalid.");
+            }
+            Product product = item.getProduct();
+            total += product.getPret() * item.getQuantity();
+        }
+        // D5 - discount
+        if (total > 200.0) {
+            total *= 0.95;
+        }
+        return total;
     }
 
     public void addItem(Order o, OrderItem item) {
