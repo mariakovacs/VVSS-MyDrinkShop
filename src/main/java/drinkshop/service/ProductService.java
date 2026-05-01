@@ -12,9 +12,20 @@ public class ProductService {
     private final Repository<Integer, Product> productRepo;
     private final ProductValidator validator;
 
-    public ProductService(Repository<Integer, Product> productRepo) {
+//    public ProductService(Repository<Integer, Product> productRepo) {
+//        this.productRepo = productRepo;
+//        this.validator = new ProductValidator();
+//    }
+
+    // constructor pentru teste (IMPORTANT)
+    public ProductService(Repository<Integer, Product> productRepo, ProductValidator validator) {
         this.productRepo = productRepo;
-        this.validator = new ProductValidator();
+        this.validator = validator;
+    }
+
+    // constructor normal (NU se strică aplicația)
+    public ProductService(Repository<Integer, Product> productRepo) {
+        this(productRepo, new ProductValidator());
     }
 
     public void addProduct(Product p) {
