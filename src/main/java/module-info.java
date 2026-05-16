@@ -19,7 +19,7 @@ module drinkshop {
     opens drinkshop.domain to javafx.base;
     exports drinkshop.domain;
 
-    // 🔥 ADAUGI ASTEA (IMPORTANT)
+
     exports drinkshop.repository;
     exports drinkshop.service;
     exports drinkshop.service.validator;
