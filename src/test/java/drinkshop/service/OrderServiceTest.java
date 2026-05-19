@@ -49,7 +49,7 @@ class OrderServiceTest {
     @Tag("WhiteBox")
     @DisplayName("TC01 - o = null -> exception")
     @Timeout(value = 1, unit = TimeUnit.SECONDS)
-    void tc01_nullOrder_throwsException() {
+    void TC01_ECP_Valid() {
         IllegalArgumentException ex = assertThrows(
                 IllegalArgumentException.class,
                 () -> service.computeTotal(null)
@@ -61,7 +61,7 @@ class OrderServiceTest {
     @Tag("WhiteBox")
     @DisplayName("TC02 - items = null -> 0.0")
     @Timeout(value = 1, unit = TimeUnit.SECONDS)
-    void tc02_itemsNull_returnsZero() {
+    void TC02_ECP_NonValid() {
         Order order = new Order(1, null, 0.0);
         assertEquals(0.0, service.computeTotal(order), 0.0001);
     }
@@ -79,7 +79,7 @@ class OrderServiceTest {
     @Tag("WhiteBox")
     @DisplayName("TC04 - items = [null] -> exception")
     @Timeout(value = 1, unit = TimeUnit.SECONDS)
-    void tc04_nullItem_throwsException() {
+    void TC04_BVA_NonValid() {
         List<OrderItem> items = new ArrayList<>();
         items.add(null);
         Order order = new Order(1, items, 0.0);
