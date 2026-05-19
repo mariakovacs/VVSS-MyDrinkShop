@@ -70,7 +70,7 @@ class OrderServiceTest {
     @Tag("WhiteBox")
     @DisplayName("TC03 - items = [] -> 0.0")
     @Timeout(value = 1, unit = TimeUnit.SECONDS)
-    void tc03_itemsEmpty_returnsZero() {
+    void TC03_BVA_Valid() {
         Order order = new Order(1, new ArrayList<>(), 0.0);
         assertEquals(0.0, service.computeTotal(order), 0.0001);
     }
